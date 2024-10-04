@@ -62,3 +62,5 @@ export class navigatePageAlerts {
     await this.elementsNestedFrames.click();
   }
 }
+
+

@@ -2,13 +2,17 @@ import { test, expect } from '@playwright/test';
 import { navigatePageAlerts } from '../../pages/navigateAlerts.page';
 
 test.describe('Testing new windows and new tabs', () => {
+ 
+  let navigatePage: navigatePageAlerts
+  
   test.beforeEach('Go to main page', async ({ page }) => {
+     navigatePage = new navigatePageAlerts(page);
     await page.goto('/');
   });
 
   test('Test New tab', async ({ page, context }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
+  
     const message = 'This is a sample page';
 
     //Act
@@ -23,7 +27,7 @@ test.describe('Testing new windows and new tabs', () => {
 
   test('Test New window', async ({ page, context }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
+
     const message = 'This is a sample page';
 
     //Act
@@ -37,7 +41,7 @@ test.describe('Testing new windows and new tabs', () => {
 
   test('Test New window message', async ({ page, context }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
+
     const message =
       'Knowledge increases by sharing but not by saving. Please share this website with your friends and in your organization.';
 
