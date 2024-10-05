@@ -1,22 +1,29 @@
 import { test, expect } from '@playwright/test';
-import { NavigateWidgets } from '../../pages/navigateWidgets.page';
-import { log } from 'console';
+import { NavigateWidgetsTab, Slider } from '../../pages/navigateWidgets.page';
 
-test.describe('Testing all the widges', () => {
-  test.beforeEach('Go to main page', async ({ page }) => {
-    await page.goto('/');
-  });
+test.describe('Test slider button', () => {
+  let navigateAlertsTab: NavigateWidgetsTab;
+  let slider: Slider;
+
+  test.beforeEach(
+    'Set up test environment: navigate to main page, initialize elements',
+    async ({ page }) => {
+      navigateAlertsTab = new NavigateWidgetsTab(page);
+      slider = new Slider(page);
+
+      await page.goto('/');
+    }
+  );
 
   test('Test slider selector with keybord', async ({ page }) => {
     //Arrange
-    const navigateWidgets = new NavigateWidgets(page);
     const arrowPress = 10;
 
     //Act
-    await navigateWidgets.openSliderMenu();
-    await navigateWidgets.sliderBar.hover();
+    await navigateAlertsTab.openSliderMenu();
+    await slider.button.Slider.hover();
     await page.mouse.down();
-    await navigateWidgets.sliderBar.hover({
+    await slider.button.Slider.hover({
       force: true,
       position: { x: 0, y: -4 },
     });
@@ -32,16 +39,13 @@ test.describe('Testing all the widges', () => {
 
   test('Test slider selector with fill', async ({ page }) => {
     //Arrange
-    const navigateWidgets = new NavigateWidgets(page);
     const inputVal = '20';
-   
+
     //Act
-    await navigateWidgets.openSliderMenu();
-     await navigateWidgets.sliderBar.fill(inputVal)
-   
+    await navigateAlertsTab.openSliderMenu();
+    await slider.button.Slider.fill(inputVal);
+
     //Assert
     await expect(page.locator('#sliderValue')).toHaveValue(inputVal);
   });
-
-
 });

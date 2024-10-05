@@ -1,19 +1,29 @@
 import { test, expect } from '@playwright/test';
-import { NavigateWidgets } from '../../pages/navigateWidgets.page';
-import { log } from 'console';
+import {
+  NavigateWidgetsTab,
+  ProgressBar,
+} from '../../pages/navigateWidgets.page';
 
-test.describe('Testing all the widges', () => {
-  test.beforeEach('Go to main page', async ({ page }) => {
-    await page.goto('/');
-  });
+test.describe('Test progress bar', () => {
+  let navigateAlertsTab: NavigateWidgetsTab;
+  let progressBar: ProgressBar;
+
+  test.beforeEach(
+    'Set up test environment: navigate to main page, initialize elements',
+    async ({ page }) => {
+      navigateAlertsTab = new NavigateWidgetsTab(page);
+      progressBar = new ProgressBar(page);
+
+      await page.goto('/');
+    }
+  );
 
   test('Test full progress bar', async ({ page }) => {
     //Arrange
-    const navigateWidgets = new NavigateWidgets(page);
 
     //Act
-    await navigateWidgets.openProgressBar();
-    await navigateWidgets.progressBarButton.click();
+    await navigateAlertsTab.openProgressBar();
+    await progressBar.button.ProgressBar.click();
     await page.waitForTimeout(20000);
 
     //Assert
@@ -22,13 +32,12 @@ test.describe('Testing all the widges', () => {
 
   test('Test reset full progress bar', async ({ page }) => {
     //Arrange
-    const navigateWidgets = new NavigateWidgets(page);
 
     //Act
-    await navigateWidgets.openProgressBar();
-    await navigateWidgets.progressBarButton.click();
+    await navigateAlertsTab.openProgressBar();
+    await progressBar.button.ProgressBar.click();
     await page.waitForTimeout(20000);
-    await navigateWidgets.progressBarResetButton.click();
+    await progressBar.button.ProgressBarReset.click();
 
     //Assert
     await expect(page.getByRole('progressbar')).toContainText('0%'); //Assert

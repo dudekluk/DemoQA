@@ -1,16 +1,27 @@
 import { test, expect } from '@playwright/test';
-import { navigatePageAlerts } from '../../pages/navigateAlerts.page';
+import {
+  NavigateAlertsTab,
+  SimpleAlert,
+} from '../../pages/navigateAlerts.page';
 
-test.describe('Testing alerts', () => {
-  test.beforeEach('Go to main page', async ({ page }) => {
-    await page.goto('/');
-  });
+test.describe('Testing simple alerts', () => {
+  let navigateElementsTab: NavigateAlertsTab;
+  let simpleAlert: SimpleAlert;
+
+  test.beforeEach(
+    'Set up test environment: navigate to main page, initialize elements',
+    async ({ page }) => {
+      await page.goto('/');
+      navigateElementsTab = new NavigateAlertsTab(page);
+      simpleAlert = new SimpleAlert(page);
+    }
+  );
 
   test('Test simple alert', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
     const message = 'You clicked a button';
     let alertMessage;
+
     //Act
     page.on('dialog', async (dialog) => {
       console.log(dialog.message());
@@ -19,8 +30,8 @@ test.describe('Testing alerts', () => {
       // await dialog.dismiss();
     });
 
-    await navigatePage.openAlertsMenu();
-    await navigatePage.alertButton.click();
+    await navigateElementsTab.openAlertsMenu();
+    await simpleAlert.button.Alert.click();
 
     //Assert
     await expect(alertMessage).toEqual(message);
@@ -28,7 +39,6 @@ test.describe('Testing alerts', () => {
 
   test('Test alert with delay', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
     const message = 'This alert appeared after 5 seconds';
     let alertMessage;
 
@@ -38,8 +48,8 @@ test.describe('Testing alerts', () => {
       await dialog.accept();
     });
 
-    navigatePage.openAlertsMenu();
-    await navigatePage.alertTimerButton.click();
+    await navigateElementsTab.openAlertsMenu();
+    await simpleAlert.button.Timer.click();
     await page.waitForTimeout(8000);
 
     //Assert
@@ -48,7 +58,6 @@ test.describe('Testing alerts', () => {
 
   test('Test alert with confirm action', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
     const message = 'Do you confirm action?';
     const confirmMessage = 'You selected Ok';
     let alertMessage;
@@ -59,8 +68,8 @@ test.describe('Testing alerts', () => {
       await dialog.accept();
     });
 
-    await navigatePage.openAlertsMenu();
-    await navigatePage.alertConfirmButton.click();
+    await navigateElementsTab.openAlertsMenu();
+    await simpleAlert.button.Confirm.click();
 
     //Assert
     await expect(alertMessage).toEqual(message);
@@ -68,7 +77,7 @@ test.describe('Testing alerts', () => {
   });
   test('Test alert with input action', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
+
     const messageInput = 'Jan Kowalski';
     const message = 'Please enter your name';
     const confirmMessage = `You entered ${messageInput}`;
@@ -81,8 +90,8 @@ test.describe('Testing alerts', () => {
       await dialog.accept(messageInput);
     });
 
-    await navigatePage.openAlertsMenu();
-    await navigatePage.alertPromptButton.click();
+    await navigateElementsTab.openAlertsMenu();
+    await simpleAlert.button.Prompt.click();
 
     //Assert
     await expect(alertMessage).toEqual(message);

@@ -1,98 +1,152 @@
-import { Page } from '@playwright/test';
+import { Locator, Page } from '@playwright/test';
 
-export class NavigateWidgets {
-  constructor(private page: Page) {}
-  goToWidgets = this.page.getByRole('heading', {
-    name: 'Widgets',
-  });
+export class NavigateWidgetsTab {
+  private page: Page;
+  public sideBarMenu: Record<string, Locator>;
 
-  ///Sidebar navigation to Widgets tab
-  elementsAccordian = this.page.locator('li').filter({ hasText: 'Accordian' });
-  elementsAutoComplete = this.page
-    .locator('li')
-    .filter({ hasText: 'Auto Complete' });
-  elementsDatePicker = this.page
-    .locator('li')
-    .filter({ hasText: 'Date Picker' });
-  elementSlider = this.page.locator('li').filter({ hasText: 'Slider' });
-  elementsProgressBar = this.page
-    .locator('li')
-    .filter({ hasText: 'Progress Bar' });
-  elementsTabs = this.page.locator('li').filter({ hasText: 'Tabs' });
-  elementsToolTips = this.page.locator('li').filter({ hasText: 'Tool Tips' });
-  elementsMenu = this.page.locator('li').filter({ hasText: 'Menu' });
-  elementsSelectMenu = this.page
-    .locator('li')
-    .filter({ hasText: 'Select Menu' });
+  constructor(page: Page) {
+    this.page = page;
+    this.sideBarMenu = {
+      goToWidgets: this.page.getByRole('heading', {
+        name: 'Widgets',
+      }),
+      Accordian: this.page.locator('li').filter({ hasText: 'Accordian' }),
+      AutoComplete: this.page
+        .locator('li')
+        .filter({ hasText: 'Auto Complete' }),
+      DatePicker: this.page.locator('li').filter({ hasText: 'Date Picker' }),
+      Slider: this.page.locator('li').filter({ hasText: 'Slider' }),
+      ProgressBar: this.page.locator('li').filter({ hasText: 'Progress Bar' }),
+      Tabs: this.page.locator('li').filter({ hasText: 'Tabs' }),
+      ToolTips: this.page.locator('li').filter({ hasText: 'Tool Tips' }),
+      Menu: this.page.locator('li').filter({ hasText: 'Menu' }),
+      SelectMenu: this.page.locator('li').filter({ hasText: 'Select Menu' }),
+    };
+  }
 
-  //Accordian elements
-  firstAccordian = this.page.getByText('What is Lorem Ipsum?');
-  secondAccordian = this.page.getByText('Where does it come from?');
-  thirdAccordian = this.page.getByText('Why do we use it?');
-  
-  // Auto complete elements
-  multiChoiceAutoComplete = this.page
-    .locator('.auto-complete__value-container')
-    .first();
-  singleChoiceAutoComplete = this.page.locator(
-    '#autoCompleteSingleContainer > .auto-complete__control > .auto-complete__value-container'
-  );
-
-  // Date picker elements
-  datePicker = this.page.locator('#datePickerMonthYearInput');
-  dateAndTimePicker = this.page.locator('#dateAndTimePickerInput');
-
-  // Text tabs elements
-  tabUseButton = this.page
-    .getByRole('tablist')
-    .getByText('Use', { exact: true });
-  tabWhatButton = this.page
-    .getByRole('tablist')
-    .getByText('What', { exact: true });
-  tabOriginButton = this.page
-    .getByRole('tablist')
-    .getByText('Origin', { exact: true });
-  tabMoreButton = this.page
-    .getByRole('tablist')
-    .getByText('More', { exact: true });
-
-  // Tool tips elements
-  toolTipButton = this.page.getByRole('button', { name: 'Hover me to see' });
-  toolTipInput = this.page.getByPlaceholder('Hover me to see');
-  toolTipText = this.page.getByText('Contrary');
-  //sliderBar = this.page.locator('#sliderContainer')
-  sliderBar = this.page.getByRole('slider');
-  progressBarButton = this.page.getByRole('button', { name: 'Start' });
-  progressBarResetButton = this.page.getByRole('button', { name: 'Reset' });
-
-  // Open menu item
   public async openAccordianMenu() {
-    await this.goToWidgets.click();
-    await this.elementsAccordian.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.Accordian.click();
   }
   public async openAutoCompletenMenu() {
-    await this.goToWidgets.click();
-    await this.elementsAutoComplete.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.AutoComplete.click();
   }
   public async openDatePickerMenu() {
-    await this.goToWidgets.click();
-    await this.elementsDatePicker.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.DatePicker.click();
   }
   public async openSliderMenu() {
-    await this.goToWidgets.click();
-    await this.elementSlider.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.Slider.click();
   }
   public async openProgressBar() {
-    await this.goToWidgets.click();
-    await this.elementsProgressBar.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.ProgressBar.click();
   }
   public async openTextTabs() {
-    await this.goToWidgets.click();
-    await this.elementsTabs.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.Tabs.click();
   }
   public async openToolTipsTab() {
-    await this.goToWidgets.click();
-    await this.elementsToolTips.click();
+    await this.sideBarMenu.goToWidgets.click();
+    await this.sideBarMenu.ToolTips.click();
   }
-  
+}
+
+export class Accordian {
+  private page: Page;
+  public button: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.button = {
+      First: this.page.getByText('What is Lorem Ipsum?'),
+      Second: this.page.getByText('Where does it come from?'),
+      Third: this.page.getByText('Why do we use it?'),
+    };
+  }
+}
+
+export class AutoComplete {
+  private page: Page;
+  public button: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.button = {
+      MultiChoice: this.page.locator('.auto-complete__value-container').first(),
+      SingleChoise: this.page.locator(
+        '#autoCompleteSingleContainer > .auto-complete__control > .auto-complete__value-container'
+      ),
+    };
+  }
+}
+
+export class DatePicker {
+  private page: Page;
+  public button: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.button = {
+      Date: this.page.locator('#datePickerMonthYearInput'),
+      DateAndTime: this.page.locator('#dateAndTimePickerInput'),
+    };
+  }
+}
+
+export class ProgressBar {
+  private page: Page;
+  public button: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.button = {
+      ProgressBar: this.page.getByRole('button', { name: 'Start' }),
+      ProgressBarReset: this.page.getByRole('button', { name: 'Reset' }),
+    };
+  }
+}
+
+export class Slider {
+  private page: Page;
+  public button: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.button = {
+      Slider: this.page.getByRole('slider'),
+    };
+  }
+}
+
+export class Tab {
+  private page: Page;
+  public button: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.button = {
+      Use: this.page.getByRole('tablist').getByText('Use', { exact: true }),
+      What: this.page.getByRole('tablist').getByText('What', { exact: true }),
+      Origin: this.page.getByRole('tablist').getByText('Origin', { exact: true }),
+      More: this.page.getByRole('tablist').getByText('More', { exact: true }),
+    };
+  }
+}
+
+
+export class ToolTips {
+  private page: Page;
+  public element: Record<string, Locator>;
+
+  constructor(page: Page) {
+    this.page = page;
+    this.element = {
+      Button: this.page.getByRole('button', { name: 'Hover me to see' }),
+      Input: this.page.getByPlaceholder('Hover me to see'),
+      Text:  this.page.getByText('Contrary'),
+    };
+  }
 }

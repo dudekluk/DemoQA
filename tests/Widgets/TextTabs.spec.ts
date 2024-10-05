@@ -1,41 +1,47 @@
 import { test, expect } from '@playwright/test';
-import { NavigateWidgets } from '../../pages/navigateWidgets.page';
-import exp from 'constants';
+import { NavigateWidgetsTab, Tab } from '../../pages/navigateWidgets.page';
 
 test.describe('Testing text tabs', () => {
-  test.beforeEach('Go to main page', async ({ page }) => {
-    await page.goto('/');
-  });
+  let navigateAlertsTab: NavigateWidgetsTab;
+  let tab: Tab;
+
+  test.beforeEach(
+    'Set up test environment: navigate to main page, initialize elements',
+    async ({ page }) => {
+      navigateAlertsTab = new NavigateWidgetsTab(page);
+      tab = new Tab(page);
+
+      await page.goto('/');
+    }
+  );
 
   test('Check active and disabled tabs', async ({ page }) => {
     //Arrange
-    const navigateWidgets = new NavigateWidgets(page);
 
     //Act
-    await navigateWidgets.openTextTabs();
+    await navigateAlertsTab.openTextTabs();
 
     //Assert
-    await expect.soft(navigateWidgets.tabOriginButton).not.toBeDisabled();
-    await expect.soft(navigateWidgets.tabUseButton).not.toBeDisabled();
-    await expect.soft(navigateWidgets.tabWhatButton).not.toBeDisabled();
-    await expect.soft(navigateWidgets.tabMoreButton).toBeDisabled();
+    await expect.soft(tab.button.Origin).not.toBeDisabled();
+    await expect.soft(tab.button.Use).not.toBeDisabled();
+    await expect.soft(tab.button.What).not.toBeDisabled();
+    await expect.soft(tab.button.More).toBeDisabled();
   });
 
   test('Test switching tabs', async ({ page }) => {
     //Arrange
-    const navigateWidgets = new NavigateWidgets(page);
 
     //Act
-    await navigateWidgets.openTextTabs();
+    await navigateAlertsTab.openTextTabs();
 
     //Assert
-    await navigateWidgets.tabOriginButton.click();
-    await expect.soft(navigateWidgets.tabOriginButton).toBeFocused();
+    await tab.button.Origin.click();
+    await expect.soft(tab.button.Origin).toBeFocused();
 
-    await navigateWidgets.tabUseButton.click();
-    await expect.soft(navigateWidgets.tabUseButton).toBeFocused();
+    await tab.button.Use.click();
+    await expect.soft(tab.button.Use).toBeFocused();
 
-    await navigateWidgets.tabWhatButton.click();
-    await expect.soft(navigateWidgets.tabWhatButton).toBeFocused();
+    await tab.button.What.click();
+    await expect.soft(tab.button.What).toBeFocused();
   });
 });

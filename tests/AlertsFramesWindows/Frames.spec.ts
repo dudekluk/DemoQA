@@ -1,20 +1,24 @@
 import { test, expect } from '@playwright/test';
-import { navigatePageAlerts } from '../../pages/navigateAlerts.page';
-import { url } from 'inspector';
+import { NavigateAlertsTab } from '../../pages/navigateAlerts.page';
 
 test.describe('Testing frames', () => {
-  test.beforeEach('Go to main page', async ({ page }) => {
-    await page.goto('/');
-  });
+  let navigateAlertsTab: NavigateAlertsTab;
+
+  test.beforeEach(
+    'Set up test environment: navigate to main page, initialize elements',
+    async ({ page }) => {
+      navigateAlertsTab = new NavigateAlertsTab(page);
+      await page.goto('/');
+    }
+  );
 
   test('Test small frame', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
     const message = 'This is a sample page';
     const firstFrame = page.frameLocator('#frame1');
 
     //Act
-    await navigatePage.openFramesMenu();
+    await navigateAlertsTab.openFramesMenu();
 
     //Assert
     expect(firstFrame.locator('#sampleHeading')).toHaveText(message);
@@ -22,12 +26,11 @@ test.describe('Testing frames', () => {
 
   test('Test big frame', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
     const message = 'This is a sample page';
     const secondFrame = page.frameLocator('#frame2');
 
     //Act
-    await navigatePage.openFramesMenu();
+    await navigateAlertsTab.openFramesMenu();
 
     //Assert
     expect(secondFrame.locator('#sampleHeading')).toHaveText(message);
@@ -35,7 +38,6 @@ test.describe('Testing frames', () => {
 
   test('Test nested frames', async ({ page }) => {
     //Arrange
-    const navigatePage = new navigatePageAlerts(page);
     const messageParent = 'Parent frame';
     const messageChild = 'Child Iframe';
     const firstFrame = page.frameLocator('#frame1');
@@ -45,7 +47,7 @@ test.describe('Testing frames', () => {
     const insideFrameContent = insideFrame.contentFrame();
 
     //Act
-    await navigatePage.openNestedFramesMenu();
+    await navigateAlertsTab.openNestedFramesMenu();
 
     //Assert
     expect.soft(firstFrame.locator('body')).toHaveText(messageParent);
